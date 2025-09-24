@@ -1,19 +1,16 @@
+// Registro 8-bit con load
 module register(clk, data, load, out);
-   input clk, load;
-   input [3:0] data;
-   output [3:0] out;
+  input        clk;
+  input        load;
+  input  [7:0] data;
+  output [7:0] out;
 
-   wire         clk, load;
-   wire [3:0]   data;
-   reg [3:0]    out;
+  reg [7:0] q;
+  assign out = q;
 
-   initial begin
-	   out = 0;
-   end
+  initial q = 8'h00;
 
-   always @(posedge clk) begin
-	   if (load) begin
-		   out <= data;
-	   end
-   end
+  always @(posedge clk) begin
+    if (load) q <= data;
+  end
 endmodule
