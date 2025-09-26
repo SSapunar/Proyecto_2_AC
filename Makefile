@@ -13,12 +13,19 @@ YOSYS_SCRIPT   = yosys.tcl
 IVERILOG_FLAGS = -g2012
 
 # Rutas de salida
-OUT_DIR       = out
-OUT_FILE      = $(OUT_DIR)/tb.vvp
-WAVEFORM_FILE = $(OUT_DIR)/dump.vcd
+OUT_DIR        = out
+OUT_FILE       = $(OUT_DIR)/tb.vvp
+WAVEFORM_FILE  = $(OUT_DIR)/dump.vcd
+
+# ---------- GTKWave (forzar Flatpak para evitar conflictos con snap/core20) ----------
+# Guarda una vista en File → Write Save File… como out/wave.gtkw para que se cargue sola.
+WAVE_SAVE ?= $(OUT_DIR)/wave.gtkw
+GTKWAVE_BIN := flatpak run io.github.gtkwave.GTKWave
+
+# Targets
+.PHONY: all build run wave synth clean
 
 # Target por defecto
-.PHONY: all build run wave synth clean
 all: run
 
 # Crear carpeta de salida
@@ -36,10 +43,17 @@ run: build
 	@echo "Ejecutando simulación..."
 	vvp $(OUT_FILE)
 
-# Ver formas de onda
+# Ver formas de onda (Flatpak siempre)
 wave: run
-	@echo "Abriendo GTKWave..."
-	gtkwave $(WAVEFORM_FILE) &
+	@echo "Abriendo GTKWave (Flatpak)..."
+	@if [ ! -f "$(WAVEFORM_FILE)" ]; then \
+	  echo "No existe $(WAVEFORM_FILE). Corre 'make run' primero."; exit 1; \
+	fi
+	@if [ -f "$(WAVE_SAVE)" ]; then \
+	  $(GTKWAVE_BIN) "$(WAVEFORM_FILE)" "$(WAVE_SAVE)" & \
+	else \
+	  $(GTKWAVE_BIN) "$(WAVEFORM_FILE)" & \
+	fi
 
 # Síntesis (opcional)
 synth: $(OUT_DIR)
