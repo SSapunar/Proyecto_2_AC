@@ -1,5 +1,5 @@
 # Archivos del proyecto
-VERILOG_FILES = computer.v alu.v instruction_memory.v mux2.v pc.v register.v
+VERILOG_FILES = computer.v # EJERCICIO: Rellenar los archivos verilog
 TESTBENCH_FILE = testbench.v
 YOSYS_SCRIPT = yosys.tcl
 
@@ -11,37 +11,37 @@ WAVEFORM_FILE = $(OUT_DIR)/dump.vcd
 # Target por defecto
 all: build run
 
-# Directorio de salida
+# Target para crear el directorio de salida
 $(OUT_DIR):
 	@mkdir -p $(OUT_DIR)
 
-# Construcción
+# Target para construir el ejecutable de simulación
 build: $(OUT_DIR)
 	@echo "Construyendo ejecutable de simulación..."
-	iverilog -g2012 -o $(OUT_DIR)/$(OUT_FILE) $(VERILOG_FILES) $(TESTBENCH_FILE)
+	iverilog -o $(OUT_DIR)/$(OUT_FILE) $(VERILOG_FILES) $(TESTBENCH_FILE)
 	@echo "Construcción exitosa. Ejecutable creado en $(OUT_DIR)/$(OUT_FILE)"
 
-# Ejecución
+# Target para ejecutar la simulación
 run:
 	@echo "Ejecutando simulación..."
 	vvp $(OUT_DIR)/$(OUT_FILE)
 
-# Ondas
+# Target para ver las formas de onda
 wave:
 	@echo "Abriendo formas de onda con GTKWave..."
-	gtkwave $(WAVEFORM_FILE) &
+	gtkwave $(WAVEFORM_FILE)
 
-# Síntesis
+# Target para síntesis
 synth: $(OUT_DIR)
 	@echo "Iniciando síntesis lógica con Yosys..."
 	yosys -c $(YOSYS_SCRIPT)
 	@echo "Síntesis completa."
 
-# Limpieza
+# Target para limpiar los archivos generados
 clean:
 	@echo "Limpiando archivos generados..."
 	@rm -rf $(OUT_DIR)
-	@rm -f yosys.log dump.vcd
+	@rm -f yosys.log
 	@echo "Limpieza completa."
 
 .PHONY: all build run wave synth clean

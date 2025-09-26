@@ -1,27 +1,28 @@
-`timescale 1ns/1ps
-module testbench;
-  reg clk;
-  wire [7:0] alu_out_bus;         // <-- 8 bits
+module test;
+   reg cl = 0;
+   wire [3:0] alu_out_bus;
 
-  computer UUT(.clk(clk), .alu_out_bus(alu_out_bus));
+   computer Comp(.clk(cl), .alu_out_bus(alu_out_bus));
 
-  initial begin
-    clk = 0;
-    forever #1 clk = ~clk;
-  end
+   initial begin
+     $dumpfile("out/dump.vcd");
+     $dumpvars(0, test);
 
-  initial begin
-    $dumpfile("out/dump.vcd");
-    $dumpvars(0, testbench);
-  end
+     $readmemb("im.dat", Comp.IM.mem);
 
-  initial begin
-    $display(" time | pc  im[8:0]   A    B    ALU");
-    $monitor(" %4t |  %h  %b  %02h  %02h  %02h",
-      $time, UUT.pc_out_bus, UUT.im_out_bus, UUT.regA_out_bus, UUT.regB_out_bus, alu_out_bus);
-  end
+     $display("mem[0] = %h", Comp.IM.mem[0]);
+     $display("mem[1] = %h", Comp.IM.mem[1]);
+     $display("mem[2] = %h", Comp.IM.mem[2]);
+     $display("mem[3] = %h", Comp.IM.mem[3]);
 
-  initial begin
-    #40 $finish;
-  end
+     $monitor("At time %t, pc = 0x%h, im = b%b, regA = 0x%h, regB = 0x%h, alu=0x%h (b=0x%h)",
+              $time, Comp.pc_out_bus, Comp.im_out_bus, Comp.regA_out_bus, Comp.regB_out_bus, alu_out_bus,
+              Comp.im_out_bus[3:0]);
+
+     wait (Comp.PC.pc == 3);
+     #2;
+     $finish;
+   end
+
+   always #1 cl = ~cl;
 endmodule
