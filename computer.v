@@ -33,6 +33,6 @@ module computer(clk, alu_out_bus);
 
    alu ALU(.a(regA_out_bus),
            .b(muxB_out_bus),
-           .s(im_out_bus[5:4]),
+           .s(im_out_bus[5:3]),     // CAMBIO (a lo huaso): abrimos la cancha a 3 bits pa’ meter las 8 maniobras.
            .out(alu_out_bus));
 endmodule
