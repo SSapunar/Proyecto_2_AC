@@ -61,6 +61,10 @@ synth: $(OUT_DIR)
 	yosys -c $(YOSYS_SCRIPT)
 	@echo "Síntesis completa."
 
+stats:
+	yosys -p 'read_verilog -sv computer.v alu.v pc.v mux2.v instruction_memory.v register.v; hierarchy -check -top computer; stat'
+
+
 # Limpiar
 clean:
 	@echo "Limpiando archivos generados..."
