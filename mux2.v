@@ -3,7 +3,7 @@ module mux2(e0, e1, c, out);
    input        c;
    output [7:0] out;
    
-   // CAMBIO (a lo huaso): que no se nos cruce el caballo 'alu' en este potrero.
+   // que no se nos cruce el caballo 'alu' en este potrero.
    // Este archivo DEBE tener solo el módulo mux2, ni un 'alu' escondido.
 
    reg [7:0] out;
