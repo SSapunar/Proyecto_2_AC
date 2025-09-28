@@ -1,6 +1,6 @@
 module alu(a, b, s, out);
    input [7:0] a, b;
-   input [2:0] s;          // 3 bits pa’ meter 8 operaciones, bien apretaditas.
+   input [2:0] s;          // 3 bits pa’ meter 8 operaciones, bien apretaditas
    output [7:0] out;
 
    reg [7:0] out;
