@@ -1,14 +1,15 @@
+`default_nettype none
 module instruction_memory(
-    input  wire [3:0] address,
-    output wire [8:0] out
+    input  wire [7:0]  address,     // 0..255
+    output wire [14:0] out          // [14:8]=opcode (7b), [7:0]=literal
 );
+    // El TB escribe aquí: $readmemb("im_memory.dat", Comp.IM.mem)
+    reg [14:0] mem [0:255];
 
-   reg [8:0] mem [0:15];
+    initial begin
+        // Carga por defecto; el TB la sobreescribe con im_memory.dat
+        $readmemb("im.dat", mem);
+    end
 
-   initial begin
-      $readmemb("im.dat", mem); // carga 16 líneas de 9 bits
-   end
-
-   assign out = mem[address];
-
+    assign out = mem[address];
 endmodule
