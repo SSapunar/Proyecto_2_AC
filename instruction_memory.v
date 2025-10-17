@@ -1,6 +1,7 @@
-module instruction_memory(address, out);
-   input  [3:0] address;
-   output [8:0] out;
+module instruction_memory(
+    input  wire [3:0] address,
+    output wire [8:0] out
+);
 
    reg [8:0] mem [0:15];
 
@@ -9,4 +10,5 @@ module instruction_memory(address, out);
    end
 
    assign out = mem[address];
+
 endmodule
